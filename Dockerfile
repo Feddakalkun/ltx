@@ -69,7 +69,7 @@ RUN git clone https://github.com/WASasquatch/was-node-suite-comfyui.git && \
 
 # Copy workflow to a stable location (start.sh copies it into the user dir at runtime)
 RUN mkdir -p /app/workflows
-COPY "LTX-23 5in1.JSON" /app/workflows/
+COPY LTX-23_5in1.JSON /app/workflows/
 
 # Copy entrypoint scripts
 COPY start.sh /start.sh

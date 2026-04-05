@@ -3,7 +3,7 @@
 set -euo pipefail
 
 COMFYUI_DIR="/app/ComfyUI"
-WORKFLOW_SRC="/app/workflows/LTX-23 5in1.JSON"
+WORKFLOW_SRC="/app/workflows/LTX-23_5in1.JSON"
 
 # RunPod mounts network volumes at /workspace by default.
 # Fall back to /runpod-volume if that is what was configured.
