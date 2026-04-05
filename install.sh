@@ -4,6 +4,7 @@ set -euo pipefail
 
 COMFYUI_DIR="${COMFYUI_DIR:-$HOME/ComfyUI}"
 CUSTOM_NODES_DIR="$COMFYUI_DIR/custom_nodes"
+WORKFLOW_FILE="LTX-23 5in1.JSON"
 
 echo "==> Installing ComfyUI to $COMFYUI_DIR"
 if [ ! -d "$COMFYUI_DIR" ]; then
@@ -52,9 +53,9 @@ install_node "was-node-suite-comfyui"      "https://github.com/WASasquatch/was-n
 
 echo ""
 echo "==> Copying workflow into ComfyUI"
-cp "$(dirname "$(realpath "$0")")/LTX-23 5in1.JSON" "$COMFYUI_DIR/user/default/workflows/" 2>/dev/null || \
-  mkdir -p "$COMFYUI_DIR/user/default/workflows" && \
-  cp "$(dirname "$(realpath "$0")")/LTX-23 5in1.JSON" "$COMFYUI_DIR/user/default/workflows/"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+mkdir -p "$COMFYUI_DIR/user/default/workflows"
+cp "$SCRIPT_DIR/$WORKFLOW_FILE" "$COMFYUI_DIR/user/default/workflows/"
 
 echo ""
 echo "==> Done! Next steps:"

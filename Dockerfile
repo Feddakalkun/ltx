@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 \
-    && python3 -m pip install --upgrade pip
+    && python3 -m pip install --upgrade pip \
+    && pip install huggingface_hub
 
 WORKDIR /app
 
@@ -66,14 +67,18 @@ RUN git clone https://github.com/evanspearman/ComfyMath.git && \
 RUN git clone https://github.com/WASasquatch/was-node-suite-comfyui.git && \
     pip install -r was-node-suite-comfyui/requirements.txt
 
-# Copy workflow
-WORKDIR /app/ComfyUI
-RUN mkdir -p user/default/workflows
-COPY "LTX-23 5in1.JSON" user/default/workflows/
+# Copy workflow to a stable location (start.sh copies it into the user dir at runtime)
+RUN mkdir -p /app/workflows
+COPY "LTX-23 5in1.JSON" /app/workflows/
 
-# Models are expected to be mounted at runtime (see docker-compose.yml)
-VOLUME ["/app/ComfyUI/models"]
+# Copy entrypoint scripts
+COPY start.sh /start.sh
+COPY download_models.sh /app/download_models.sh
+RUN chmod +x /start.sh /app/download_models.sh
+
+# Models are provided via a mounted network volume (see start.sh / docker-compose.yml)
+VOLUME ["/workspace"]
 
 EXPOSE 8188
 
-CMD ["python", "main.py", "--listen", "0.0.0.0", "--port", "8188"]
+CMD ["/start.sh"]
